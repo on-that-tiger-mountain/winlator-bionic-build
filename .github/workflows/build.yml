@@ -29,23 +29,25 @@ jobs:
           --branch winlator_bionic \
           https://github.com/Pipetto-crypto/winlator
 
-      - name: Clone build repository
-        run: git clone https://github.com/Alexoqool/winlator-bionic-build
+      - name: Checkout build repository
+        uses: actions/checkout@v4
+        with:
+          path: build
 
       - name: Get current source commit SHA and changelog
         run: |
           cd winlator
-          if [ -f ../winlator-bionic-build/commit_sha.txt ]; then
-            echo "CHANGELOG=$(git log $(cat ../winlator-bionic-build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
-            git rev-parse HEAD > ../winlator-bionic-build/commit_sha.txt
+          if [ -f ../build/commit_sha.txt ]; then
+            echo "CHANGELOG=$(git log $(cat ../build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
+            git rev-parse HEAD > ../build/commit_sha.txt
           else
-            git rev-parse HEAD > ../winlator-bionic-build/commit_sha.txt
-            echo "CHANGELOG=$(git log $(cat ../winlator-bionic-build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
+            git rev-parse HEAD > ../build/commit_sha.txt
+            echo "CHANGELOG=$(git log $(cat ../build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
           fi
 
       - name: Update last build commit SHA
         run: |
-          cd winlator-bionic-build
+          cd build
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add commit_sha.txt
