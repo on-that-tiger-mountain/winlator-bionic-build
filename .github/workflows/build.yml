@@ -24,7 +24,7 @@ jobs:
       - name: Clone source repository
         run: |
           git clone \
-          --recursive-submodules \
+          --recursive \
           --single-branch \
           --branch winlator_bionic \
           https://github.com/Pipetto-crypto/Winlator
