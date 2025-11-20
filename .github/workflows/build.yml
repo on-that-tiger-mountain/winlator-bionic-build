@@ -38,11 +38,11 @@ jobs:
         run: |
           cd winlator
           if [ -f ../build/commit_sha.txt ]; then
-            echo "CHANGELOG=$(git log --pretty=format:%s $(cat ../build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
+            echo "$(git log --pretty=format:%s $(cat ../build/commit_sha.txt)..HEAD)" > CHANGELOG.txt
             git rev-parse HEAD > ../build/commit_sha.txt
           else
             git rev-parse HEAD > ../build/commit_sha.txt
-            echo "CHANGELOG=$(git log --pretty=format:%s $(cat ../build/commit_sha.txt)..HEAD)" >> $GITHUB_ENV
+            echo "$(git log --pretty=format:%s $(cat ../build/commit_sha.txt)..HEAD)" > CHANGELOG.txt
           fi
 
       - name: Update last build commit SHA
@@ -74,7 +74,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ env.CHANGELOG }}
+          body_path: winlator/CHANGELOG.txt
           files: winlator/app/build/outputs/apk/debug/app-debug.apk
           name: winlator-bionic-${{ env.DATE }}
           tag_name: ${{ env.DATE }}
